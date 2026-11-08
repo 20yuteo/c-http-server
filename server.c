@@ -75,10 +75,25 @@ if (bytes_read == -1) {
     printf("\n");
 }
 
+const char *response =
+    "HTTP/1.1 200 OK\r\n"
+    "Content-Type: text/plain\r\n"
+    "Content-Length: 12\r\n"
+    "Connection: close\r\n"
+    "\r\n"
+    "Hello World!";
+
+ssize_t bytes_written = write(client_fd, response, strlen(response));
+
+if (bytes_written == -1) {
+    perror("write");
+} else {
+    printf("Wrote %zd bytes\n", bytes_written);
+}
+
 close(client_fd);
 close(server_fd);
 
-close(server_fd);
 return 0;
   
 }
