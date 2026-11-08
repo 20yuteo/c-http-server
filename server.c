@@ -32,5 +32,19 @@ int main(void) {
     return 1;
   }
 
+printf("Socket bound to port 8080\n");
+printf("PID: %d\n", getpid());
+
+if (listen(server_fd, 10) == -1) {
+    perror("listen");
+    close(server_fd);
+    return 1;
+}
+
+printf("Listening on port 8080...\n");
+sleep(60);
+
+close(server_fd);
+return 0;
   
 }
