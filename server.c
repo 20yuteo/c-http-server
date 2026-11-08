@@ -42,7 +42,41 @@ if (listen(server_fd, 10) == -1) {
 }
 
 printf("Listening on port 8080...\n");
-sleep(60);
+
+printf("Waiting for connection...\n");
+
+int client_fd = accept(server_fd, NULL, NULL);
+
+if (client_fd == -1) {
+    perror("accept");
+    close(server_fd);
+    return 1;
+}
+
+printf("Client connected!\n");
+printf("server_fd = %d\n", server_fd);
+printf("client_fd = %d\n", client_fd);
+
+// 受信データを格納する領域
+char buffer[4096];
+
+// TCPからデータを読み取る
+ssize_t bytes_read = read(client_fd, buffer, sizeof(buffer));
+
+if (bytes_read == -1) {
+    perror("read");
+} else if (bytes_read == 0) {
+    printf("Client closed the connection.\n");
+} else {
+    printf("Received %zd bytes\n", bytes_read);
+
+    // 読み取ったデータを標準出力に表示する
+    fwrite(buffer, 1, (size_t)bytes_read, stdout);
+    printf("\n");
+}
+
+close(client_fd);
+close(server_fd);
 
 close(server_fd);
 return 0;
